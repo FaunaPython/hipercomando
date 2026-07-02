@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Outra Versão — Ativação do Método HiperComando</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style>
+/* ============================================================
+   A OUTRA VERSÃO — Ativação do Método HiperComando
+   Apresentação web premium · 16:9 · HiperConsciência
+   ============================================================ */
+
+/* ---------- Fontes (Google Fonts com fallback) ---------- */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap');
+
+/* ---------- Variáveis ---------- */
+:root {
+  --offwhite:   #F4EFE7;
+  --areia:      #D8C7AE;
+  --terra:      #6B4F3B;
+  --cacau:      #2F221B;
+  --oliva:      #3F4A36;
+  --preto:      #171412;
+  --terracota:  #A65F3F;
+  --ambar:      #C49A4A;
+  --pedra:      #8A857D;
+
+  --serif: 'Cormorant Garamond', 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --sans:  'Inter', 'Manrope', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  --ease: cubic-bezier(.22, .61, .36, 1);
+}
+
+/* ---------- Reset ---------- */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--preto);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Palco 16:9 ---------- */
+#stage {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  cursor: default;
+}
+
+/* Textura de papel sutil (ruído SVG embutido — sem imagens externas) */
+#stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: .05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='0.9'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+/* ---------- Slides ---------- */
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6vh 7vw;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(2.5%) scale(.995);
+  transition:
+    opacity .9s var(--ease),
+    transform .9s var(--ease),
+    visibility 0s linear .9s;
+  z-index: 1;
+}
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0) scale(1);
+  transition:
+    opacity .9s var(--ease),
+    transform .9s var(--ease),
+    visibility 0s;
+  z-index: 2;
+}
+.slide.prev { transform: translateX(-2.5%) scale(.995); }
+
+.inner {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 1160px;
+}
+
+/* ---------- Revelação em cascata ---------- */
+.reveal { opacity: 0; transform: translateY(22px); }
+.slide.active .reveal {
+  animation: rise 1s var(--ease) forwards;
+}
+.slide.active .reveal:nth-child(1) { animation-delay: .15s; }
+.slide.active .reveal:nth-child(2) { animation-delay: .35s; }
+.slide.active .reveal:nth-child(3) { animation-delay: .55s; }
+.slide.active .reveal:nth-child(4) { animation-delay: .75s; }
+.slide.active .reveal:nth-child(5) { animation-delay: .95s; }
+.slide.active .reveal:nth-child(6) { animation-delay: 1.15s; }
+.slide.active .reveal:nth-child(7) { animation-delay: 1.3s; }
+
+@keyframes rise {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   TIPOGRAFIA
+   ============================================================ */
+.eyebrow {
+  font-family: var(--sans);
+  font-size: clamp(.72rem, 1vw, .95rem);
+  font-weight: 500;
+  letter-spacing: .42em;
+  text-transform: uppercase;
+  color: var(--terracota);
+  margin-bottom: 2.2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+}
+.eyebrow::before {
+  content: '';
+  width: 42px;
+  height: 1px;
+  background: var(--ambar);
+  display: inline-block;
+}
+
+.display {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(3.4rem, 7.6vw, 7rem);
+  line-height: 1.02;
+  letter-spacing: .01em;
+}
+.display .thin { font-weight: 400; font-style: italic; }
+
+h1.title {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(2.5rem, 4.9vw, 4.6rem);
+  line-height: 1.08;
+  max-width: 20ch;
+  margin-bottom: 2.4rem;
+}
+.centered h1.title { max-width: none; margin-left: auto; margin-right: auto; }
+
+.subtitle {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.5rem, 2.6vw, 2.4rem);
+  color: var(--terra);
+  margin-bottom: 2.2rem;
+}
+
+.lead {
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: clamp(1.25rem, 2vw, 1.85rem);
+  line-height: 1.55;
+  max-width: 44ch;
+  margin-bottom: 1.6rem;
+}
+.lead strong { font-weight: 500; }
+
+.small-note {
+  font-family: var(--sans);
+  font-size: clamp(.95rem, 1.3vw, 1.25rem);
+  font-weight: 400;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--pedra);
+}
+
+/* Destaque — frase de impacto */
+.highlight {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.7rem, 3vw, 2.75rem);
+  line-height: 1.25;
+  max-width: 30ch;
+  margin-top: 2.6rem;
+  padding-top: 2.2rem;
+  position: relative;
+}
+.highlight::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 88px;
+  height: 1px;
+  background: var(--ambar);
+}
+
+/* Pergunta */
+.question {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(1.6rem, 2.8vw, 2.6rem);
+  line-height: 1.3;
+  color: var(--terracota);
+  max-width: 32ch;
+  margin-top: 2.4rem;
+  display: flex;
+  gap: 1.2rem;
+  align-items: baseline;
+}
+.question::before {
+  content: '';
+  flex: 0 0 10px;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ambar);
+  transform: translateY(-4px);
+}
+
+/* Lista em linhas (slide 3, 24…) */
+.lines { list-style: none; margin: 0 0 1rem; }
+.lines li {
+  font-family: var(--serif);
+  font-size: clamp(1.55rem, 2.7vw, 2.5rem);
+  font-weight: 500;
+  line-height: 1.5;
+  padding-left: 2rem;
+  position: relative;
+}
+.lines li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: .95em;
+  width: 8px; height: 1px;
+  background: var(--ambar);
+}
+.lines.sans li {
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: clamp(1.2rem, 1.9vw, 1.75rem);
+  line-height: 1.75;
+}
+
+/* Lista numerada do método */
+.method-list { list-style: none; counter-reset: mv; margin-top: 1rem; }
+.method-list li {
+  counter-increment: mv;
+  display: flex;
+  align-items: baseline;
+  gap: 1.6rem;
+  font-family: var(--serif);
+  font-size: clamp(1.6rem, 2.9vw, 2.7rem);
+  font-weight: 500;
+  line-height: 1.65;
+}
+.method-list li::before {
+  content: counter(mv, decimal-leading-zero);
+  font-family: var(--sans);
+  font-size: .42em;
+  font-weight: 500;
+  letter-spacing: .18em;
+  color: var(--ambar);
+  min-width: 2.6em;
+  border-bottom: 1px solid rgba(196,154,74,.45);
+  padding-bottom: .5em;
+  transform: translateY(-.35em);
+}
+
+/* ============================================================
+   ROTA DOS 5 MOVIMENTOS (pontos de travessia)
+   ============================================================ */
+.route {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 2.6rem;
+}
+.route .pt {
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  border: 1.5px solid var(--pedra);
+  opacity: .55;
+  flex: none;
+}
+.route .seg {
+  width: 52px; height: 1px;
+  background: var(--pedra);
+  opacity: .35;
+  flex: none;
+}
+.route .pt.done { background: var(--areia); border-color: var(--areia); opacity: .9; }
+.route .pt.now {
+  background: var(--ambar);
+  border-color: var(--ambar);
+  opacity: 1;
+  box-shadow: 0 0 0 6px rgba(196,154,74,.18);
+}
+
+/* ============================================================
+   VARIAÇÃO · MOANA — claro, editorial, mapa, papel
+   ============================================================ */
+.moana {
+  background:
+    radial-gradient(120% 90% at 82% 8%, rgba(216,199,174,.5) 0%, rgba(216,199,174,0) 55%),
+    linear-gradient(160deg, #F7F2EA 0%, var(--offwhite) 46%, #EAE2D4 100%);
+  color: var(--cacau);
+}
+.moana .lead { color: #4a3a2e; }
+
+/* Linhas de mapa / círculo incompleto */
+.moana .map-arc {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(107,79,59,.22);
+  pointer-events: none;
+}
+.moana .map-arc.a1 {
+  width: 62vh; height: 62vh;
+  top: -22vh; right: -14vh;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  transform: rotate(24deg);
+}
+.moana .map-arc.a2 {
+  width: 34vh; height: 34vh;
+  bottom: -12vh; left: -10vh;
+  border-top-color: transparent;
+  border-left-color: rgba(196,154,74,.4);
+  transform: rotate(-18deg);
+}
+.moana .map-dot {
+  position: absolute;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--ambar);
+  opacity: .7;
+  pointer-events: none;
+}
+.moana .map-line {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(107,79,59,0), rgba(107,79,59,.3), rgba(107,79,59,0));
+  pointer-events: none;
+}
+
+/* ============================================================
+   VARIAÇÃO · WALTER — quente, fogo abstrato, eixo, corpo
+   ============================================================ */
+.walter {
+  background:
+    radial-gradient(90% 70% at 50% 118%, rgba(166,95,63,.55) 0%, rgba(166,95,63,0) 62%),
+    radial-gradient(60% 46% at 50% 108%, rgba(196,154,74,.4) 0%, rgba(196,154,74,0) 60%),
+    linear-gradient(175deg, #241a14 0%, var(--cacau) 48%, #1d1512 100%);
+  color: var(--offwhite);
+}
+.walter .subtitle { color: var(--areia); }
+.walter .lead { color: #e8ddcd; }
+.walter .question { color: #d9a276; }
+.walter .small-note { color: rgba(216,199,174,.7); }
+.walter .highlight::before { background: var(--ambar); }
+.walter .lines li::before { background: var(--ambar); }
+
+/* Fogo interior abstrato — respira */
+.walter .fire {
+  position: absolute;
+  left: 50%;
+  bottom: -26vh;
+  width: 64vh; height: 64vh;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 60%,
+    rgba(196,154,74,.4) 0%,
+    rgba(166,95,63,.32) 34%,
+    rgba(166,95,63,0) 68%);
+  filter: blur(46px);
+  animation: breathe 7s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes breathe {
+  0%, 100% { transform: translateX(-50%) scale(1);    opacity: .85; }
+  50%       { transform: translateX(-50%) scale(1.12); opacity: 1;   }
+}
+
+/* Eixo vertical — coluna presente */
+.walter .axis {
+  position: absolute;
+  left: 50%;
+  top: 8vh;
+  bottom: 8vh;
+  width: 1px;
+  background: linear-gradient(180deg,
+    rgba(196,154,74,0) 0%,
+    rgba(196,154,74,.5) 40%,
+    rgba(196,154,74,.5) 60%,
+    rgba(196,154,74,0) 100%);
+  pointer-events: none;
+}
+.walter .axis::before,
+.walter .axis::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ambar);
+}
+.walter .axis::before { top: 18%; }
+.walter .axis::after  { bottom: 18%; background: var(--ambar); }
+
+/* ============================================================
+   VARIAÇÃO · COMANDO — escuro, ritual contemporâneo
+   ============================================================ */
+.command {
+  background:
+    radial-gradient(70% 55% at 50% 116%, rgba(166,95,63,.4) 0%, rgba(166,95,63,0) 60%),
+    linear-gradient(180deg, #16110e 0%, var(--preto) 60%, #100d0b 100%);
+  color: var(--offwhite);
+  text-align: center;
+}
+.command .inner { max-width: 1000px; }
+.command .eyebrow {
+  justify-content: center;
+  color: var(--areia);
+}
+.command .eyebrow::before { background: var(--ambar); }
+.command .eyebrow::after {
+  content: '';
+  width: 42px; height: 1px;
+  background: var(--ambar);
+  display: inline-block;
+}
+.command-lines { list-style: none; }
+.command-lines li {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.9rem, 3.6vw, 3.3rem);
+  line-height: 1.35;
+  padding: 1.15rem 0;
+}
+.command-lines li + li {
+  border-top: 1px solid rgba(216,199,174,.12);
+}
+.command .ember {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 110vh; height: 110vh;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid rgba(196,154,74,.14);
+  pointer-events: none;
+}
+.command .ember::before {
+  content: '';
+  position: absolute;
+  inset: 14%;
+  border-radius: 50%;
+  border: 1px solid rgba(196,154,74,.09);
+}
+
+/* ============================================================
+   VARIAÇÃO · ESCRITA GUIADA — limpo, espaço mental
+   ============================================================ */
+.writing {
+  background: linear-gradient(168deg, #F8F4ED 0%, var(--offwhite) 55%, #EFE8DA 100%);
+  color: var(--cacau);
+}
+.writing .eyebrow { color: var(--oliva); }
+.writing .eyebrow::before { background: var(--oliva); }
+
+.fills { margin-top: 1.4rem; }
+.fill {
+  display: block;
+  padding: 1.35rem 0 1.15rem;
+  border-bottom: 1px solid rgba(107,79,59,.3);
+  font-family: var(--serif);
+  font-size: clamp(1.5rem, 2.6vw, 2.35rem);
+  font-weight: 500;
+  line-height: 1.4;
+}
+.fill .cue {
+  display: inline-block;
+  margin-left: .6em;
+  color: var(--pedra);
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: .55em;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  transform: translateY(-.3em);
+}
+.writing .pen-mark {
+  position: absolute;
+  right: 7vw; top: 9vh;
+  width: 74px; height: 74px;
+  border-radius: 50%;
+  border: 1px solid rgba(63,74,54,.4);
+  border-left-color: transparent;
+  transform: rotate(-30deg);
+  pointer-events: none;
+}
+.writing .pen-mark::after {
+  content: '';
+  position: absolute;
+  right: -3px; top: 12px;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--ambar);
+}
+
+/* Exemplos dentro de escrita/criação */
+.examples {
+  margin-top: 2.4rem;
+  padding: 1.8rem 2.2rem;
+  border-left: 2px solid var(--ambar);
+  background: rgba(216,199,174,.18);
+}
+.examples .ex-label {
+  font-family: var(--sans);
+  font-size: .8rem;
+  font-weight: 500;
+  letter-spacing: .34em;
+  text-transform: uppercase;
+  color: var(--terra);
+  margin-bottom: 1rem;
+}
+.examples p {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(1.15rem, 1.8vw, 1.6rem);
+  line-height: 1.7;
+}
+.walter-examples { background: rgba(23,20,18,.35); border-left-color: var(--terracota); }
+
+/* ============================================================
+   VARIAÇÃO · ENCERRAMENTO
+   ============================================================ */
+.closing {
+  background:
+    radial-gradient(85% 65% at 50% 112%, rgba(166,95,63,.5) 0%, rgba(166,95,63,0) 62%),
+    radial-gradient(120% 90% at 85% -10%, rgba(63,74,54,.5) 0%, rgba(63,74,54,0) 55%),
+    linear-gradient(170deg, #1c1613 0%, var(--preto) 55%, #131009 100%);
+  color: var(--offwhite);
+  text-align: center;
+}
+.closing .subtitle { color: var(--areia); }
+.closing .small-note { color: rgba(216,199,174,.75); }
+.closing .display { color: var(--offwhite); }
+.closing .highlight {
+  margin-left: auto;
+  margin-right: auto;
+  color: var(--ambar);
+}
+.closing .highlight::before {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ---------- Layout central ---------- */
+.centered { text-align: center; }
+.centered .inner { display: flex; flex-direction: column; align-items: center; }
+.centered .eyebrow::after {
+  content: '';
+  width: 42px; height: 1px;
+  background: var(--ambar);
+  display: inline-block;
+}
+.centered .lead,
+.centered .highlight,
+.centered .question { margin-left: auto; margin-right: auto; }
+.centered .question { justify-content: center; }
+.centered .route { justify-content: center; }
+
+/* ============================================================
+   UI FIXA — condução e contador
+   ============================================================ */
+#conductor,
+#counter {
+  position: fixed;
+  bottom: 3.6vh;
+  z-index: 60;
+  font-family: var(--sans);
+  font-size: clamp(.7rem, .95vw, .92rem);
+  font-weight: 500;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  transition: color .6s var(--ease);
+  pointer-events: none;
+}
+#conductor {
+  left: 4.5vw;
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+}
+#conductor::before {
+  content: '';
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--ambar);
+  flex: none;
+}
+#counter { right: 4.5vw; font-variant-numeric: tabular-nums; }
+
+.ui-dark  { color: rgba(47,34,27,.75); }
+.ui-light { color: rgba(244,239,231,.72); }
+
+/* Barra de progresso fina */
+#progress {
+  position: fixed;
+  left: 0; bottom: 0;
+  height: 2px;
+  width: 0%;
+  background: var(--ambar);
+  z-index: 61;
+  transition: width .7s var(--ease);
+}
+
+/* Dica inicial de navegação */
+#hint {
+  position: fixed;
+  bottom: 3.4vh;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+  font-size: .72rem;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: rgba(138,133,125,.85);
+  opacity: 1;
+  transition: opacity 1s var(--ease);
+  pointer-events: none;
+}
+#hint.hidden { opacity: 0; }
+
+/* ---------- Responsivo / projeção ---------- */
+@media (max-aspect-ratio: 4/3) {
+  .slide { padding: 5vh 6vw; }
+  h1.title { font-size: clamp(2rem, 6.4vw, 3.4rem); }
+}
+@media (max-width: 760px) {
+  .route .seg { width: 30px; }
+  .highlight { font-size: 1.45rem; }
+}
+
+/* ---------- Impressão ---------- */
+@media print {
+  .slide { position: relative; opacity: 1 !important; visibility: visible !important; page-break-after: always; }
+  #conductor, #counter, #hint, #progress { display: none; }
+}
+
+</style>
+</head>
+<body>
+<main id="stage">
+
+  <!-- ====================== SLIDE 1 · Abertura ====================== -->
+  <section class="slide closing centered" data-conductor="Moana" data-ui="light">
+    <div class="inner">
+      <p class="eyebrow reveal">HiperConsciência</p>
+      <h1 class="display reveal">A OUTRA VERSÃO</h1>
+      <p class="subtitle reveal">Ativação do Método HiperComando</p>
+      <p class="small-note reveal">Consciência&nbsp;·&nbsp;Corpo&nbsp;·&nbsp;Comando&nbsp;·&nbsp;Matéria</p>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 2 ====================== -->
+  <section class="slide moana" data-conductor="Moana" data-ui="dark">
+    <div class="map-arc a1"></div>
+    <div class="map-dot" style="top:22vh; right:18vw;"></div>
+    <div class="inner">
+      <h1 class="title reveal">Você não veio apenas ouvir sobre mudança.</h1>
+      <p class="lead reveal">Você veio reconhecer a versão que está tentando nascer<br>e o ponto onde ainda volta para a antiga forma.</p>
+      <p class="question reveal">Quem precisa assumir o comando da minha vida agora?</p>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 3 ====================== -->
+  <section class="slide moana" data-conductor="Moana" data-ui="dark">
+    <div class="map-arc a2"></div>
+    <div class="map-line" style="top:16vh; left:20vw; width:32vw;"></div>
+    <div class="inner">
+      <h1 class="title reveal">Existe uma Outra Versão sua tentando assumir espaço.</h1>
+      <ul class="lines reveal">
+        <li>Mais presença.</li>
+        <li>Mais clareza.</li>
+        <li>Mais força.</li>
+        <li>Mais prosperidade.</li>
+        <li>Mais saúde.</li>
+        <li>Mais liberdade.</li>
+        <li>Mais direção.</li>
+      </ul>
+      <p class="highlight reveal">Essa versão não se sustenta apenas com desejo.</p>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 4 · O Método ====================== -->
+  <section class="slide moana" data-conductor="Moana" data-ui="dark">
+    <div class="map-arc a1"></div>
+    <div class="inner">
+      <p class="eyebrow reveal">O Método HiperComando</p>
+      <p class="lead reveal">Hoje você vai viver 5 movimentos:</p>
+      <ol class="method-list reveal">
+        <li>Revelar a Outra Versão</li>
+        <li>Identificar onde a travessia é interrompida</li>
+        <li>Ler a casca antiga</li>
+        <li>Instalar um novo comando interno</li>
+        <li>Provar na matéria</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 5 · Movimento 1 ====================== -->
+  <section class="slide moana" data-conductor="Moana" data-ui="dark">
+    <div class="map-arc a2"></div>
+    <div class="inner">
+      <div class="route reveal">
+        <span class="pt now"></span><span class="seg"></span>
+        <span class="pt"></span><span class="seg"></span>
+        <span class="pt"></span><span class="seg"></span>
+        <span class="pt"></span><span class="seg"></span>
+        <span class="pt"></span>
+      </div>
+      <p class="eyebrow reveal">Movimento 1</p>
+      <h1 class="title reveal">Revelar a Outra Versão</h1>
+      <p class="lead reveal">A Outra Versão não é fantasia.<br><br>É a versão sua que já consegue sustentar a vida que você sente que está tentando chegar.</p>
+      <p class="question reveal">Que versão minha é capaz de sustentar a vida que está tentando chegar?</p>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 6 · Escrita guiada ====================== -->
+  <section class="slide writing" data-conductor="Moana" data-ui="dark">
+    <div class="pen-mark"></div>
+    <div class="inner">
+      <p class="eyebrow reveal">Escrita guiada</p>
+      <p class="lead reveal">Complete no seu papel:</p>
+      <div class="fills reveal">
+        <p class="fill">A minha Outra Versão é alguém que…</p>
+        <p class="fill">Ela não aceita mais…</p>
+        <p class="fill">Ela começa a sustentar…</p>
+        <p class="fill">Ela precisa assumir o comando em…</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 7 · Transição corpo ====================== -->
+  <section class="slide walter" data-conductor="Walter" data-ui="light">
+    <div class="fire"></div>
+    <div class="inner">
+      <h1 class="title reveal">A mente pode enxergar a Outra Versão.</h1>
+      <p class="lead reveal">Mas, se o corpo continuar operando pela antiga forma,<br>a travessia não se sustenta.</p>
+      <p class="highlight reveal">Agora vamos levar essa percepção para o corpo.</p>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 8 · Prática 1 ====================== -->
+  <section class="slide walter" data-conductor="Walter" data-ui="light">
+    <div class="fire"></div>
+    <div class="axis"></div>
+    <div class="inner">
+      <p class="eyebrow reveal">Prática 1 · com Walter</p>
+      <h1 class="title reveal">Respiração do Fogo Interior</h1>
+      <ul class="lines sans reveal">
+        <li>Pés no chão.</li>
+        <li>Coluna presente.</li>
+        <li>Mãos no centro do corpo.</li>
+        <li>Respiração consciente.</li>
+        <li>Atenção no fogo interior.</li>
+      </ul>
+      <p class="highlight reveal">Objetivo: ativar presença, coragem e centro interno.</p>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 9 · Comandos da respiração ====================== -->
+  <section class="slide command centered" data-conductor="Walter" data-ui="light">
+    <div class="ember"></div>
+    <div class="inner">
+      <p class="eyebrow reveal">Comandos da respiração</p>
+      <ul class="command-lines reveal">
+        <li>Eu volto para o meu centro.</li>
+        <li>Eu ativo meu fogo interior.</li>
+        <li>Eu sustento presença no meu corpo.</li>
+        <li>Eu tenho coragem para atravessar a antiga forma.</li>
+        <li>Eu permito que a minha Outra Versão se aproxime.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 10 · Integração ====================== -->
+  <section class="slide moana" data-conductor="Moana" data-ui="dark">
+    <div class="map-arc a1"></div>
+    <div class="inner">
+      <p class="eyebrow reveal">Integração da prática</p>
+      <p class="lead reveal">Observe:</p>
+      <ul class="lines sans reveal">
+        <li>O que mudou na sua respiração?</li>
+        <li>O que mudou na sua postura?</li>
+        <li>O que mudou no seu olhar?</li>
+        <li>O que mudou na sensação de presença?</li>
+      </ul>
+      <p class="highlight reveal">A Outra Versão começa quando o corpo para de fugir do novo.</p>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 11 · Movimento 2 ====================== -->
+  <section class="slide moana" data-conductor="Moana" data-ui="dark">
+    <div class="map-arc a2"></div>
+    <div class="inner">
+      <div class="route reveal">
+        <span class="pt done"></span><span class="seg"></span>
+        <span class="pt now"></span><span class="seg"></span>
+        <span class="pt"></span><span class="seg"></span>
+        <span class="pt"></span><span class="seg"></span>
+        <span class="pt"></span>
+      </div>
+      <p class="eyebrow reveal">Movimento 2</p>
+      <h1 class="title reveal">Onde a travessia é interrompida</h1>
+      <p class="lead reveal">A mudança não falha apenas porque falta vontade.<br><br>Muitas vezes, a pessoa chega perto do novo,<br>mas uma programação antiga tenta puxar de volta.</p>
+      <p class="question reveal">Em que momento eu começo a voltar para a antiga forma?</p>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 12 · Escrita guiada ====================== -->
+  <section class="slide writing" data-conductor="Moana" data-ui="dark">
+    <div class="pen-mark"></div>
+    <div class="inner">
+      <p class="eyebrow reveal">Escrita guiada</p>
+      <p class="lead reveal">Complete:</p>
+      <div class="fills reveal">
+        <p class="fill">Quando o novo começa a chegar, eu geralmente…</p>
+        <p class="fill">Eu volto para a antiga forma quando…</p>
+        <p class="fill">O primeiro sinal de que estou recuando é…</p>
+        <p class="fill">A área da minha vida onde isso mais aparece é…</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 13 · Movimento 3 ====================== -->
+  <section class="slide moana" data-conductor="Moana" data-ui="dark">
+    <div class="map-arc a1"></div>
+    <div class="inner">
+      <div class="route reveal">
+        <span class="pt done"></span><span class="seg"></span>
+        <span class="pt done"></span><span class="seg"></span>
+        <span class="pt now"></span><span class="seg"></span>
+        <span class="pt"></span><span class="seg"></span>
+        <span class="pt"></span>
+      </div>
+      <p class="eyebrow reveal">Movimento 3</p>
+      <h1 class="title reveal">Ler a casca antiga</h1>
+      <p class="lead reveal">A casca é a forma antiga que um dia tentou proteger você.<br><br>Ela pode ter protegido do julgamento, da rejeição, do fracasso, da exposição, da responsabilidade ou da perda de pertencimento.</p>
+      <p class="highlight reveal">A casca não é inimiga.<br>Ela apenas não sustenta mais a sua Outra Versão.</p>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 14 · O comando antigo ====================== -->
+  <section class="slide moana" data-conductor="Moana" data-ui="dark">
+    <div class="map-arc a2"></div>
+    <div class="inner">
+      <p class="eyebrow reveal">O comando antigo</p>
+      <p class="lead reveal">Toda casca carrega um comando silencioso que decide antes de você.</p>
+      <ul class="lines reveal">
+        <li>Não apareça demais.</li>
+        <li>Não cobre esse valor.</li>
+        <li>Não ultrapasse os seus.</li>
+        <li>Não confie quando está bom.</li>
+        <li>Não receba sem se justificar.</li>
+        <li>Não ocupe esse lugar.</li>
+      </ul>
+      <p class="question reveal">Qual comando antigo ainda tenta decidir por mim?</p>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 15 · Escrita guiada ====================== -->
+  <section class="slide writing" data-conductor="Moana" data-ui="dark">
+    <div class="pen-mark"></div>
+    <div class="inner">
+      <p class="eyebrow reveal">Escrita guiada</p>
+      <p class="lead reveal">Complete:</p>
+      <div class="fills reveal">
+        <p class="fill">Minha casca tenta me manter em…</p>
+        <p class="fill">Ela acredita que está me protegendo de…</p>
+        <p class="fill">O comando antigo que eu ainda obedeço é…</p>
+        <p class="fill">Esse comando já não sustenta quem eu estou me tornando porque…</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 16 · Movimento 4 ====================== -->
+  <section class="slide moana" data-conductor="Moana" data-ui="dark">
+    <div class="map-arc a1"></div>
+    <div class="inner">
+      <div class="route reveal">
+        <span class="pt done"></span><span class="seg"></span>
+        <span class="pt done"></span><span class="seg"></span>
+        <span class="pt done"></span><span class="seg"></span>
+        <span class="pt now"></span><span class="seg"></span>
+        <span class="pt"></span>
+      </div>
+      <p class="eyebrow reveal">Movimento 4</p>
+      <h1 class="title reveal">Instalar o HiperComando</h1>
+      <p class="lead reveal">O HiperComando não é uma frase motivacional.<br><br>É uma nova ordem interna.<br>Ele entra no lugar onde antes a casca decidia.</p>
+      <p class="highlight reveal">Olhar. Postura. Resposta. Escolha. Ação.</p>
+      <p class="question reveal">Qual novo comando precisa assumir no lugar da antiga programação?</p>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 17 · Criação do novo comando ====================== -->
+  <section class="slide writing" data-conductor="Moana" data-ui="dark">
+    <div class="pen-mark"></div>
+    <div class="inner">
+      <p class="eyebrow reveal">Criação do novo comando</p>
+      <p class="lead reveal">Complete:</p>
+      <div class="fills reveal">
+        <p class="fill">A partir de agora, eu escolho sustentar…</p>
+        <p class="fill">Eu não volto mais para…</p>
+        <p class="fill">Eu assumo o comando de…</p>
+        <p class="fill">Meu novo HiperComando é…</p>
+      </div>
+      <div class="examples reveal">
+        <p class="ex-label">Exemplos</p>
+        <p>Eu sustento o novo sem voltar para a casca.<br>
+        Eu recebo sem me justificar.<br>
+        Eu permaneço quando a expansão chega.<br>
+        Eu atravesso a porta onde antes eu recuava.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 18 · Transição corpo 2 ====================== -->
+  <section class="slide walter" data-conductor="Walter" data-ui="light">
+    <div class="fire"></div>
+    <div class="inner">
+      <h1 class="title reveal">Agora o comando precisa entrar no corpo.</h1>
+      <p class="lead reveal">Porque o novo só permanece<br>quando o corpo aprende a não fugir dele.</p>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 19 · Prática 2 ====================== -->
+  <section class="slide walter" data-conductor="Walter" data-ui="light">
+    <div class="fire"></div>
+    <div class="axis"></div>
+    <div class="inner">
+      <p class="eyebrow reveal">Prática 2 · com Walter</p>
+      <h1 class="title reveal">Respiração de Coragem e Sustentação</h1>
+      <ul class="lines sans reveal">
+        <li>Pés firmes.</li>
+        <li>Coluna ativa.</li>
+        <li>Centro desperto.</li>
+        <li>Peito aberto.</li>
+        <li>Respiração com intenção.</li>
+        <li>Olhar presente.</li>
+      </ul>
+      <p class="highlight reveal">Objetivo: instalar o novo comando no corpo com coragem, presença, performance e sustentação.</p>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 20 · Comandos em voz alta ====================== -->
+  <section class="slide command centered" data-conductor="Walter" data-ui="light">
+    <div class="ember"></div>
+    <div class="inner">
+      <p class="eyebrow reveal">Comandos para repetir em voz alta</p>
+      <ul class="command-lines reveal">
+        <li>Eu expando e permaneço.</li>
+        <li>Meu corpo sustenta a minha nova forma.</li>
+        <li>Eu não volto para a casca.</li>
+        <li>Eu sustento presença quando o novo chega.</li>
+        <li>Eu ajo a partir da minha Outra Versão.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 21 · Instalação do comando ====================== -->
+  <section class="slide command centered" data-conductor="Moana + Walter" data-ui="light">
+    <div class="ember"></div>
+    <div class="inner">
+      <p class="eyebrow reveal">Instalação do comando</p>
+      <p class="lead reveal">Agora repita o seu próprio comando:</p>
+      <ul class="command-lines reveal">
+        <li>Meu HiperComando é: ____________________</li>
+      </ul>
+      <p class="lead reveal" style="margin-top:2.2rem;">Respire. Sinta no corpo. Sustente a postura.</p>
+      <p class="highlight reveal">Não fale como promessa.<br>Fale como ordem interna.</p>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 22 · Movimento 5 ====================== -->
+  <section class="slide moana" data-conductor="Moana" data-ui="dark">
+    <div class="map-arc a2"></div>
+    <div class="inner">
+      <div class="route reveal">
+        <span class="pt done"></span><span class="seg"></span>
+        <span class="pt done"></span><span class="seg"></span>
+        <span class="pt done"></span><span class="seg"></span>
+        <span class="pt done"></span><span class="seg"></span>
+        <span class="pt now"></span>
+      </div>
+      <p class="eyebrow reveal">Movimento 5</p>
+      <h1 class="title reveal">Provar na matéria</h1>
+      <p class="lead reveal">A Outra Versão não começa quando você entende.<br><br>Ela começa quando você escolhe diferente<br>no ponto onde antes voltava para a antiga forma.</p>
+      <p class="highlight reveal">Não é arrepio.<br>É prova.</p>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 23 · Prova na matéria (escrita) ====================== -->
+  <section class="slide writing" data-conductor="Moana" data-ui="dark">
+    <div class="pen-mark"></div>
+    <div class="inner">
+      <p class="eyebrow reveal">Prova na matéria</p>
+      <p class="lead reveal">Complete:</p>
+      <div class="fills reveal">
+        <p class="fill">Minha Prova na Matéria será…</p>
+        <p class="fill">Eu realizarei essa ação até…</p>
+        <p class="fill">Essa ação prova que eu não volto mais para…</p>
+        <p class="fill">Essa escolha representa a minha Outra Versão porque…</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 24 · Exemplos ====================== -->
+  <section class="slide moana" data-conductor="Moana" data-ui="dark">
+    <div class="map-arc a1"></div>
+    <div class="inner">
+      <p class="eyebrow reveal">Exemplos de Prova na Matéria</p>
+      <ul class="lines sans reveal">
+        <li>Uma conversa que você precisa ter.</li>
+        <li>Uma decisão que vem adiando.</li>
+        <li>Um limite que precisa colocar.</li>
+        <li>Uma proposta que precisa enviar.</li>
+        <li>Um valor que precisa sustentar.</li>
+        <li>Uma rotina que precisa iniciar.</li>
+        <li>Um ciclo que precisa encerrar.</li>
+        <li>Uma escolha que representa sua nova fase.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 25 · Síntese ====================== -->
+  <section class="slide moana" data-conductor="Moana" data-ui="dark">
+    <div class="map-arc a2"></div>
+    <div class="inner">
+      <div class="route reveal">
+        <span class="pt done"></span><span class="seg"></span>
+        <span class="pt done"></span><span class="seg"></span>
+        <span class="pt done"></span><span class="seg"></span>
+        <span class="pt done"></span><span class="seg"></span>
+        <span class="pt done"></span>
+      </div>
+      <p class="eyebrow reveal">Síntese do método</p>
+      <p class="lead reveal">Hoje você fez 5 movimentos:</p>
+      <ul class="lines sans reveal">
+        <li>Você revelou a Outra Versão.</li>
+        <li>Identificou onde volta para a antiga forma.</li>
+        <li>Reconheceu a casca.</li>
+        <li>Criou um novo HiperComando.</li>
+        <li>Escolheu uma Prova na Matéria.</li>
+      </ul>
+      <p class="highlight reveal">Agora a nova versão não é apenas uma ideia.<br>Ela tem direção. Tem comando. Tem corpo. Tem ação.</p>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 26 · Declaração final ====================== -->
+  <section class="slide command centered" data-conductor="Moana + Walter" data-ui="light">
+    <div class="ember"></div>
+    <div class="inner">
+      <p class="eyebrow reveal">Declaração final</p>
+      <ul class="command-lines reveal">
+        <li>Eu reconheço a minha Outra Versão.</li>
+        <li>Eu honro a casca que me protegeu.</li>
+        <li>Mas eu não volto mais para a forma que ficou pequena.</li>
+        <li>Eu instalo um novo comando.</li>
+        <li>Eu sustento no corpo.</li>
+        <li>Eu provo na matéria.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 27 ====================== -->
+  <section class="slide moana centered" data-conductor="Moana" data-ui="dark">
+    <div class="map-arc a1"></div>
+    <div class="inner">
+      <h1 class="title reveal">A mente viu.</h1>
+      <p class="lead reveal">O corpo sustentou.<br>Agora a matéria precisa receber a sua decisão.</p>
+      <p class="highlight reveal">A sua Outra Versão começa na próxima escolha.</p>
+    </div>
+  </section>
+
+  <!-- ====================== SLIDE 28 · Encerramento ====================== -->
+  <section class="slide closing centered" data-conductor="Moana + Walter" data-ui="light">
+    <div class="inner">
+      <p class="eyebrow reveal">Método HiperComando</p>
+      <h1 class="display reveal">A OUTRA VERSÃO</h1>
+      <p class="small-note reveal" style="margin-top:1.6rem;">Consciência&nbsp;·&nbsp;Corpo&nbsp;·&nbsp;Comando&nbsp;·&nbsp;Matéria</p>
+      <p class="highlight reveal">Sua nova forma começa agora.</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- UI fixa -->
+<div id="conductor">Condução: Moana</div>
+<div id="counter">01 / 28</div>
+<div id="hint">← → para navegar</div>
+<div id="progress"></div>
+
+<script>
+/* ============================================================
+   A OUTRA VERSÃO — navegação da apresentação
+   Setas ← → · Home · End · clique avança · F = tela cheia
+   ============================================================ */
+(function () {
+  'use strict';
+
+  const slides    = Array.from(document.querySelectorAll('.slide'));
+  const conductor = document.getElementById('conductor');
+  const counter   = document.getElementById('counter');
+  const progress  = document.getElementById('progress');
+  const hint      = document.getElementById('hint');
+  const total     = slides.length;
+
+  let current = 0;
+  let hintShown = true;
+
+  function pad(n) {
+    return String(n).padStart(2, '0');
+  }
+
+  function render() {
+    slides.forEach(function (slide, i) {
+      slide.classList.toggle('active', i === current);
+      slide.classList.toggle('prev', i < current);
+    });
+
+    const slide = slides[current];
+
+    // Condução do momento
+    conductor.textContent = 'Condução: ' + (slide.dataset.conductor || 'Moana');
+
+    // Contador discreto — ex.: 04 / 28
+    counter.textContent = pad(current + 1) + ' / ' + pad(total);
+
+    // Cor da UI conforme fundo do slide (claro/escuro)
+    const light = slide.dataset.ui === 'light';
+    conductor.classList.toggle('ui-light', light);
+    conductor.classList.toggle('ui-dark', !light);
+    counter.classList.toggle('ui-light', light);
+    counter.classList.toggle('ui-dark', !light);
+
+    // Barra de progresso
+    progress.style.width = (((current + 1) / total) * 100) + '%';
+
+    // Reinicia animações de revelação do slide ativo
+    slide.querySelectorAll('.reveal').forEach(function (el) {
+      el.style.animation = 'none';
+      // força reflow para reiniciar a animação
+      void el.offsetWidth;
+      el.style.animation = '';
+    });
+  }
+
+  function hideHint() {
+    if (hintShown) {
+      hint.classList.add('hidden');
+      hintShown = false;
+    }
+  }
+
+  function go(n) {
+    const next = Math.max(0, Math.min(total - 1, n));
+    if (next !== current) {
+      current = next;
+      render();
+    }
+    hideHint();
+  }
+
+  function nextSlide() { go(current + 1); }
+  function prevSlide() { go(current - 1); }
+
+  // ---------- Teclado ----------
+  document.addEventListener('keydown', function (e) {
+    switch (e.key) {
+      case 'ArrowRight':
+      case 'PageDown':
+      case ' ':
+        e.preventDefault();
+        nextSlide();
+        break;
+      case 'ArrowLeft':
+      case 'PageUp':
+        e.preventDefault();
+        prevSlide();
+        break;
+      case 'Home':
+        e.preventDefault();
+        go(0);
+        break;
+      case 'End':
+        e.preventDefault();
+        go(total - 1);
+        break;
+      case 'f':
+      case 'F':
+        toggleFullscreen();
+        break;
+    }
+  });
+
+  // ---------- Clique / toque: avança ----------
+  document.getElementById('stage').addEventListener('click', function (e) {
+    // clique no terço esquerdo volta; resto avança
+    if (e.clientX < window.innerWidth / 3) {
+      prevSlide();
+    } else {
+      nextSlide();
+    }
+  });
+
+  // ---------- Tela cheia (opcional, tecla F) ----------
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(function () {});
+    } else {
+      document.exitFullscreen();
+    }
+  }
+
+  // ---------- Início ----------
+  render();
+})();
+
+</script>
+</body>
+</html>
